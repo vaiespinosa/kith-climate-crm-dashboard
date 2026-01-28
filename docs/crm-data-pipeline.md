@@ -143,10 +143,28 @@ node scripts/reclassify-leads.js
 
 ## Complete Workflow for New Registrants
 
-```bash
-# 1. Import CSV to Supabase (manual or via import script)
+### Step 0: Export from Luma
+1. Go to Luma event → Guests → Export CSV
+2. Save to `/Workshop Registrants/` folder
+3. Name format: `Build a Climate Solution - Guests - Mon - Dayth.csv`
 
-# 2. Fix any unparsed names
+### Step 1: Import to Supabase
+```bash
+node scripts/import-registrants.js "<csv-filename>" <YYYY-MM-DD>
+
+# Example for Feb 5th workshop:
+node scripts/import-registrants.js "Build a Climate Solution - Guests - Feb - 5th.csv" 2026-02-05
+```
+
+This script:
+- Creates new leads (deduped by email)
+- Parses names from `name` field if `first_name`/`last_name` empty
+- Creates registration records with attendance status
+- Skips already-imported registrations (by `source_api_id`)
+
+### Step 2-5: Enrichment Pipeline
+```bash
+# 2. Fix any remaining unparsed names
 node scripts/fix-names.js
 
 # 3. Enrich with LinkedIn data
@@ -156,6 +174,14 @@ APIFY_TOKEN=your_token node scripts/linkedin-enrichment.js
 APIFY_TOKEN=your_token node scripts/rescrape-profiles.js
 
 # 5. Classify leads
+node scripts/reclassify-leads.js
+```
+
+### Quick One-Liner (after import)
+```bash
+node scripts/fix-names.js && \
+APIFY_TOKEN=your_token node scripts/linkedin-enrichment.js && \
+APIFY_TOKEN=your_token node scripts/rescrape-profiles.js && \
 node scripts/reclassify-leads.js
 ```
 
