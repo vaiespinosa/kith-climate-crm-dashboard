@@ -11,8 +11,9 @@ directory = ".open-next/assets"
 binding = "ASSETS"
 
 # Custom domain routes
-[[route]]
-pattern = "crm.kithclimate.com"
+[route]
+pattern = "crm.kithclimate.com/*"
+zone_id = "22989907f43562abd12a5dbf002df775"
 custom_domain = true
 
 # Environment variables for local development
