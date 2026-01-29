@@ -9,3 +9,14 @@ main = ".open-next/worker.js"
 [assets]
 directory = ".open-next/assets"
 binding = "ASSETS"
+
+# Custom domain routes
+routes = [
+  { pattern = "crm.kithclimate.com", custom_domain = true }
+]
+
+# Environment variables for local development
+# Production values are set in Cloudflare dashboard
+[vars]
+# NEXT_PUBLIC_SUPABASE_URL = "your-supabase-url"
+# NEXT_PUBLIC_SUPABASE_ANON_KEY = "your-anon-key"
